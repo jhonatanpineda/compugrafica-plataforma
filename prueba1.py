@@ -22,6 +22,7 @@ deceSeg=0
 unidMin=0
 deceMin=0
 #------------------------------------------------------------------------------------------------------------------------------------------------
+
 class TextoTiempo:
     def __init__(self, TipoFuente = 'Zombified.ttf', Tamano = 40):
         pygame.font.init()
@@ -320,12 +321,15 @@ class PlataformasNivel1(pygame.sprite.Sprite):
                  [2800, 500],
                  [3000, 350],
                  [3200, 200],
+                 [3500, 500],
                  [3600, 200],
+                 [4000, 300],
                  [4200, 500],
-
+                 [4700, 300],
+                 [4800, 500],
                  [5500, 200],
-                 [5100, 350],
-                 [5400, 500]]
+                 [5100, 350]
+                   ]
         for plataforma in nivel:
             bloque = Plataforma()
             bloque.rect.x = plataforma[0]
@@ -342,19 +346,16 @@ class PlataformasNivel1(pygame.sprite.Sprite):
 class PlataformasNivel2(pygame.sprite.Sprite):
     def __init__(self):
         self.ListaPlataformas = pygame.sprite.Group()
-        nivel = [[800, 260],
-                 [850, 510],
-                 [1200, 340],
-                 [1800, 500],
-                 [2800, 500],
-                 [3000, 350],
-                 [3200, 200],
-                 [3600, 200],
-                 [4200, 500],
+        nivel = [[800, 280],[3200,295],[4400,300],[3400,120],
+                 [1000, 510],[1200, 280],[3600,295],[4000, 300],
+                 [1400, 510],[2000, 280],
+                 [1600, 510],[2200, 280],
+                 [1800,510],[2400, 280],
+                 [3000,510],[2600,280],
+                 [3800,510],[2800,280],
+                 [4500,510],
+                 ]
 
-                 [5500, 200],
-                 [5100, 350],
-                 [5400, 500]]
         for plataforma in nivel:
             bloque = Plataforma2()
             bloque.rect.x = plataforma[0]
@@ -458,7 +459,8 @@ class Zombies(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.Zombie1 = pygame.image.load("EnemigoZombie.png").convert_alpha()
         self.Zombie2 = pygame.transform.flip(self.Zombie1, True, False)
-        
+      
+
         self.zombie1 = {}
         self.zombie1[0] = (0, 0, 60, 86)
         self.zombie1[1] = (60, 0, 80, 86)
@@ -535,11 +537,14 @@ class ZombiesNivel1(pygame.sprite.Sprite):
 
         posicionzombie = [[1270, 260],
                           [915, 430],
-                          [1000, 620],
-                          [1300, 620],
                           [1500, 620],
+                          [1600, 620],
+                          [1700, 620],
                           [2200, 620],
-                          [3900, 620]]
+                          [3900, 620],
+                          [5200, 610],
+                          [5050, 610],
+                          [4850, 610]]
         for recorrido in posicionzombie:
             zombie = Zombies(recorrido[0],recorrido[1])
             self.ListaZombies.add(zombie) 
@@ -621,10 +626,13 @@ class FantasmasNivel1(pygame.sprite.Sprite):
         self.ListaFantasmas = pygame.sprite.Group()
 
         posicionfantasma = [[1530, 610],
+                            [1750, 620],
                             [1870, 415],
                             [2700, 610],
                             [3280, 120],
-                            [5200, 610],
+                            [5150, 610],
+                            [5000, 610],
+                            [4800, 610]
                             ]
         for recorrido in posicionfantasma:
             fantasma = Fantasmas(recorrido[0],recorrido[1])
@@ -636,6 +644,7 @@ class FantasmasNivel1(pygame.sprite.Sprite):
     def draw(self, pantalla):
         self.ListaFantasmas.draw(pantalla) 
 #------------------------------------------------------------------------------------------------------------------------------------------------
+#JEFE NIVEL 1
 class Dragones(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
         pygame.sprite.Sprite.__init__(self)
@@ -708,10 +717,7 @@ class DragonesNivel1(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.ListaDragones = pygame.sprite.Group()
 
-        posiciondragon = [[3045, 610],
-                          [3300, 610],
-                          [4700, 610],
-                          [5150, 610]]
+        posiciondragon = [[5150, 260]]
         for recorrido in posiciondragon:
             dragon = Dragones(recorrido[0],recorrido[1])
             self.ListaDragones.add(dragon) 
@@ -721,6 +727,96 @@ class DragonesNivel1(pygame.sprite.Sprite):
      
     def draw(self, pantalla):
         self.ListaDragones.draw(pantalla) 
+
+
+#nivel 2
+
+class Dragones2(pygame.sprite.Sprite):
+    def __init__(self, posX, posY):
+        pygame.sprite.Sprite.__init__(self)
+        self.Dragon1 = pygame.image.load("EnemigoDragon3.png").convert_alpha()
+        self.Dragon2 = pygame.transform.flip(self.Dragon1, True, False)
+        
+        self.dragon1 = {}
+        self.dragon1[0] = (0, 0, 100, 96)
+        self.dragon1[1] = (100, 0, 100, 96)
+        self.dragon1[2] = (200, 0, 100, 96)
+        self.dragon1[3] = (300, 0, 100, 96)
+
+        self.dragon2 = {}
+        self.dragon2[0] = (300, 0, 100, 96)
+        self.dragon2[1] = (200, 0, 100, 96)
+        self.dragon2[2] = (100, 0, 100, 96)
+        self.dragon2[3] = (0, 0, 100, 96)
+        
+        self.actualizacion = pygame.time.get_ticks()
+        self.cual = 0     
+        self.izquierda = False   
+        self.obtenerDibujo()
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (posX, posY)
+        self.dx = 1
+        self.PosicionX = posX
+
+    def obtenerDibujo(self):
+        if self.izquierda:
+            self.image=self.Dragon2.subsurface(self.dragon2[self.cual])
+        else:
+            self.image=self.Dragon1.subsurface(self.dragon1[self.cual])
+
+    def update(self):
+        if self.actualizacion + 100 < pygame.time.get_ticks():
+           self.cual += 1
+           if self.cual > 3:
+              self.cual = 0
+           self.obtenerDibujo()
+           self.actualizacion= pygame.time.get_ticks()
+        
+        TiempoMovimiento =pygame.time.get_ticks()/1000         
+        t = TiempoMovimiento
+        if t==2 or t==6 or t==10 or t==14 or t==18 or t==22 or t==26 or t==30 or t==34 or t==38 or t==42 or t==46 or t==50 or t==54 or t==58 or t==62 or t==66 or t==70 or t==74 or t==78 or t==82 or t==86 or t==90 or t==94 or t==98 or t==102 or t==106 or t==110 or t==114 or t==118 or t==122 or t==126 or t==130 or t==134 or t==138 or t==142 or t==146 or t==150 or t==154 or t==158 or t==162  or t==166 or t==170 or t==174 or t==178 or t==182 or t==186 or t==190 or t==194 or t==198 or t==202:
+           self.izquierda = True
+
+                
+        if t==4 or t==8 or t==12 or t==16 or t==20 or t==24 or t==28 or t==32 or t==36 or t==40 or t==44 or t==48 or t==52 or t==56 or t==60 or t==64 or t==68 or t==72 or t==76 or t==80 or t==84 or t==88 or t==92 or t==96 or t==100 or t==104 or t==108 or t==112 or t==116 or t==120 or t==124 or t==128 or t==132 or t==136 or t==140 or t==144 or t==148 or t==152 or t==156 or t==160 or t==164 or t==168 or t==172 or t==176 or t==180 or t==184 or t==188 or t==192 or t==196 or t==200 or t==204:
+           self.izquierda = False
+
+        if self.izquierda == True:
+           self.rect.move_ip(-self.dx,0)
+        else:
+           self.rect.move_ip(self.dx,0)
+
+        if scroll:
+           if FondoDerecha == True:
+              if personaje.rect.x > 680:
+                 self.rect.move_ip(0,0)
+              else:
+                 self.rect.move_ip(-VELOCIDAD,0)
+           if FondoDerecha == False:
+              if personaje.rect.x < 680:
+                 self.rect.move_ip(0,0)
+              else:
+                 self.rect.move_ip(VELOCIDAD,0)
+
+
+#JEFE NIVEL 2
+class DragonesNivel2(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.ListaDragones = pygame.sprite.Group()
+
+        posiciondragon2 = [[5400, 610]
+                          ]
+        for recorrido in posiciondragon2:
+            dragon = Dragones2(recorrido[0],recorrido[1])
+            self.ListaDragones.add(dragon) 
+
+    def update(self):
+        self.ListaDragones.update()
+     
+    def draw(self, pantalla):
+        self.ListaDragones.draw(pantalla) 
+
 
 class Zombies2(pygame.sprite.Sprite):
     def __init__(self, posX, posY):
@@ -802,10 +898,15 @@ class ZombiesNivel2(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.ListaZombies = pygame.sprite.Group()
 
-        posicionzombie2 = [[800, 620],[900, 620],[1000, 620],[1100, 620],
+        posicionzombie2 = [ [800, 620],[900, 620],[1000, 620],[1100, 620],
                             [1200, 620],[1300, 620],[1400, 620],[1500, 620],
-                            [2500, 620],[2600, 620],[2700, 620],[2800, 620],[2900, 620],[3000, 620],[3500, 620],[4000, 620],
-                            [4100, 620],[4200, 620],[4300, 620],[4500, 620]
+                            [1420,435],[1820,435],[2500, 620],[2600, 620],
+                            [2700, 620],[2800, 620],[2900, 620],[3000, 620],
+                            [2220,200],[2620,200],[3220,220],
+
+                            [3500, 620],[4000, 620],
+                            [4100, 620],[4200, 620],[4300, 620],[4500, 620],
+                            [4800,620],[4900,620],[5000,620],[5100,620]
                            ]
         for recorrido in posicionzombie2:
             zombie = Zombies2(recorrido[0],recorrido[1])
@@ -887,10 +988,16 @@ class FantasmasNivel2(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.ListaFantasmas = pygame.sprite.Group()
 
-        posicionfantasma2 = [[950, 620],[1050, 620],[1150, 620],
-                            [1250, 620],[1350, 620],[1450, 620],[1650, 620],
-                            [2550, 620],[2650, 620],[2750, 620],[2850, 620],[2950, 620],[3050, 620],[3550, 620],[4050, 620],
-                            [4150, 620],[4250, 620],[4350, 620],[4550, 620]
+        posicionfantasma2 = [[850, 620],[950, 620],[1050, 620],[1150, 620],
+                            [1250, 620],[1350, 620],[1450, 620],[1550, 620],
+                            [1220,200],[1620,435],[2550, 620],[2650, 620],
+                            [2750, 620],[2850, 620],[2950, 620],[3050, 620],
+                            [2420,200],[2820,200],
+
+                            [3550, 620],[4050, 620],
+                            [4150, 620],[4250, 620],[4350, 620],[4550, 620],
+                            [4850,620],[4950,620],[5050,620],[5150,620]
+
                             ]
         for recorrido in posicionfantasma2:
             fantasma = Fantasmas2(recorrido[0],recorrido[1])
@@ -943,6 +1050,30 @@ class VidasNivel1(pygame.sprite.Sprite):
                         [3690, 100],
                         [2999, 300],
                         [4000, 100],
+                        [5000, 100]
+                        ]
+        for recorrido in posicionvida:
+            vida = Vidas((recorrido[0],recorrido[1]), self.Vida)
+            self.ListaVidas.add(vida) 
+
+    def update(self):
+        self.ListaVidas.update()
+     
+    def draw(self, pantalla):
+        self.ListaVidas.draw(pantalla) 
+
+class VidasNivel2(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.ListaVidas = pygame.sprite.Group()
+        self.Vida = pygame.image.load("Vidas.png")
+        self.transparente = self.Vida.get_at((0,0))
+        self.Vida.set_colorkey(self.transparente)
+        posicionvida = [[800, 200],
+                        [1200, 190],
+                        [3500, 100],
+                        [2000, 190],
+                        [2800, 190],
                         ]
         for recorrido in posicionvida:
             vida = Vidas((recorrido[0],recorrido[1]), self.Vida)
@@ -993,8 +1124,30 @@ class BalasNivel1(pygame.sprite.Sprite):
         self.Bala.set_colorkey(self.transparente)
         posicionbala = [[1870, 250],
                         [3490, 400],
+                        ]
+        for recorrido in posicionbala:
+            bala = Balas((recorrido[0],recorrido[1]), self.Bala)
+            self.ListaBalas.add(bala) 
+
+    def update(self):
+        self.ListaBalas.update()
+     
+    def draw(self, pantalla):
+        self.ListaBalas.draw(pantalla) 
+
+class BalasNivel2(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.ListaBalas = pygame.sprite.Group()
+        self.Bala = pygame.image.load("Balas.png")
+        self.transparente = self.Bala.get_at((0,0))
+        self.Bala.set_colorkey(self.transparente)
+        posicionbala = [[1870, 200],
+                        [3490, 400],
+                        [3000, 500],
                         [900,500],
-                        [1000,500],
+                        [1000,200],
+                        [4400,200]
                         ]
         for recorrido in posicionbala:
             bala = Balas((recorrido[0],recorrido[1]), self.Bala)
@@ -1009,7 +1162,7 @@ class BalasNivel1(pygame.sprite.Sprite):
 class Invencibles(pygame.sprite.Sprite):
     def __init__(self, coordenadas, imagen):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("Invencible.png")
+        self.image = pygame.image.load("Invencible1.png")
         self.rect = self.image.get_rect()
         self.rect.center = coordenadas
         self.actualizacion = pygame.time.get_ticks()
@@ -1043,7 +1196,7 @@ class InvenciblesNivel1(pygame.sprite.Sprite):
         self.Invencible = pygame.image.load("Invencible.png")
         self.transparente = self.Invencible.get_at((0,0))
         self.Invencible.set_colorkey(self.transparente)
-        posicioninvencible = [[3290, 100]]
+        posicioninvencible = [[3290, 100],[2800, 550]]
         for recorrido in posicioninvencible:
             invencible = Invencibles((recorrido[0],recorrido[1]), self.Invencible)
             self.ListaInvencibles.add(invencible) 
@@ -1052,7 +1205,8 @@ class InvenciblesNivel1(pygame.sprite.Sprite):
         self.ListaInvencibles.update()
      
     def draw(self, pantalla):
-        self.ListaInvencibles.draw(pantalla) 
+        self.ListaInvencibles.draw(pantalla)
+
 #------------------------------------------------------------------------------------------------------------------------------------------------
 class Meta(pygame.sprite.Sprite):
     def __init__(self, coordenadas, imagen):
@@ -1197,9 +1351,6 @@ sounds = Sounds()
 #PERSONAJE
 personaje = Personaje()
 #------------------------------------------------------------------------------------------------------------------------------------------------
-#ANIMACIONES SECUNDARIAS
-'''AveVuelo1 = pygame.image.load('AveVuelo1.png').convert_alpha()
-AveVuelo2 = pygame.image.load('AveVuelo2.png').convert_alpha()'''
 #------------------------------------------------------------------------------------------------------------------------------------------------
 #TIPOS DE FUENTES TEXTOS
 FuenteEstadisticas = pygame.font.Font('Zombified.ttf', 40)
@@ -1254,61 +1405,6 @@ def IconoAnimadoMonedas():
       cual1 = cual1 + 1
       if cual1 > 6:
          cual1 = 0
-#------------------------------------------------------------------------------------------------------------------------------------------------
-AveIzquierda = {}
-AveIzquierda[0] = (807, 0, 108, 80)
-AveIzquierda[1] = (697, 0, 110, 80)
-AveIzquierda[2] = (587, 0, 110, 80)
-AveIzquierda[3] = (472, 0, 115, 80)
-AveIzquierda[4] = (352, 0, 120, 80)
-AveIzquierda[5] = (230, 0, 122, 80)
-AveIzquierda[6] = (110, 0, 120, 80)
-AveIzquierda[7] = (0, 0, 110, 80)
-pos2 = 1400
-cual2 = 0
-cuanto2 = 100
-tiempo2 = 0
-def MovimientoAveIzquierda():
-   global cual2, pos2, tiempo2
-   pos2 = pos2 - 2
-   if pygame.time.get_ticks()-tiempo2 > cuanto2:
-      tiempo2 = pygame.time.get_ticks()
-      cual2 = cual2 + 1
-      if cual2 > 7:
-         cual2 = 0
-   if scroll:
-      if FondoDerecha == True:
-         if personaje.rect.x > 680:
-            pos2 = pos2 - 0
-         else:
-            pos2 = pos2 - VELOCIDAD
-      if FondoDerecha == False:
-         if personaje.rect.x < 680:
-            pos2 = pos2 + 0
-         else:
-            pos2 = pos2 + VELOCIDAD
-#------------------------------------------------------------------------------------------------------------------------------------------------
-AveDerecha = {}
-AveDerecha[0] = (0, 0, 108, 80)
-AveDerecha[1] = (108, 0, 110, 80)
-AveDerecha[2] = (218, 0, 110, 80)
-AveDerecha[3] = (328, 0, 115, 80)
-AveDerecha[4] = (443, 0, 120, 80)
-AveDerecha[5] = (563, 0, 122, 80)
-AveDerecha[6] = (685, 0, 120, 80)
-AveDerecha[7] = (805, 0, 110, 80)
-pos3 = -400
-cual3 = 0
-cuanto3 = 100
-tiempo3 = 0
-def MovimientoAveDerecha():
-   global cual3, pos3, tiempo3
-   pos3 = pos3 + 3
-   if pygame.time.get_ticks()-tiempo3 > cuanto3:
-      tiempo3 = pygame.time.get_ticks()
-      cual3 = cual3 + 1
-      if cual3 > 7:
-         cual3 = 0
 #------------------------------------------------------------------------------------------------------------------------------------------------
 pos4 = -150
 tiempo4 = 0
@@ -1403,7 +1499,7 @@ def MovimientoPresioneEspacioGameOver():
 def IniciarJuego():
     Puntaje = 0
     CantidadVidas = 5
-    CantidadBalas = 10
+    CantidadBalas = 20
     CantidadMonedas = 0
     #IMAGEN DE FONDO NIVEL 1
     FondoAnimado1 = FondoAnimado(0,0)
@@ -1454,21 +1550,36 @@ def IniciarJuego():
     GrupoDragones.append(DragonesNivel1())
     DibujoDragones = GrupoDragones[0]
     personaje.posiciondragon = DibujoDragones
+
+    GrupoDragones2 = []
+    GrupoDragones2.append(DragonesNivel2())
+    DibujoDragones2 = GrupoDragones2[0]
+    personaje.posiciondragon2 = DibujoDragones2
     #CREACION DE MODIFICADOR VIDAS
     GrupoVidas = []
     GrupoVidas.append(VidasNivel1())
     DibujoVidas = GrupoVidas[0]
     personaje.posicionvida = DibujoVidas
+
+    GrupoVidas2 = []
+    GrupoVidas2.append(VidasNivel2())
+    DibujoVidas2 = GrupoVidas2[0]
+    
     #CREACION DE MODIFICADOR BALAS
     GrupoBalas = []
     GrupoBalas.append(BalasNivel1())
     DibujoBalas = GrupoBalas[0]
     personaje.posicionbala = DibujoBalas
+
+    GrupoBalas2 = []
+    GrupoBalas2.append(BalasNivel2())
+    DibujoBalas2 = GrupoBalas2[0]
     #CREACION DE MODIFICADOR INVENCIBLE
     GrupoInvencibles = []
     GrupoInvencibles.append(InvenciblesNivel1())
     DibujoInvencibles = GrupoInvencibles[0]
     personaje.posicioninvencible = DibujoInvencibles
+
     #CREACION DE META
     j=1
     GrupoMeta = []
@@ -1537,9 +1648,9 @@ def IniciarJuego():
                    sounds.Disparo.play()
                    CantidadBalas -= 1
                    if personaje.izquierda == True:
-                      DisparosGrupo.add(DisparoIzquierda(personaje.rect.left-10, personaje.rect.y+40))
+                      DisparosGrupo.add(DisparoIzquierda(personaje.rect.left-30, personaje.rect.y+20))
                    if personaje.izquierda == False:
-                      DisparosGrupo.add(DisparoDerecha(personaje.rect.right-10, personaje.rect.y+40))
+                      DisparosGrupo.add(DisparoDerecha(personaje.rect.right-30, personaje.rect.y+20))
 #------------------------------------------------------------------------------------------------------------------------------------------------   
        if event.type == pygame.KEYDOWN:
 
@@ -1715,13 +1826,17 @@ def IniciarJuego():
           sounds.Destruido.play()
           zombie.kill()
           Puntaje += 100
-
-
-
-
 #------------------------------------------------------------------------------------------------------------------------------------------------
        ColisionBalasDragones = pygame.sprite.groupcollide(DisparosGrupo, personaje.posiciondragon.ListaDragones, True, True)
        for dragon in ColisionBalasDragones:
+          print "+300 Puntos"
+          sounds.Salto.stop()
+          sounds.Destruido.play()
+          dragon.kill()
+          Puntaje += 300
+
+       ColisionBalasDragones2 = pygame.sprite.groupcollide(DisparosGrupo, personaje.posiciondragon2.ListaDragones, True, True)
+       for dragon in ColisionBalasDragones2:
           print "+300 Puntos"
           sounds.Salto.stop()
           sounds.Destruido.play()
@@ -1877,6 +1992,35 @@ def IniciarJuego():
              else:
                 CantidadVidas -= 1
                 dragon.kill()
+
+
+       if personaje.DibujoInvencible==True:
+          ColisionPersonajeDragon2 = pygame.sprite.spritecollide(personaje, personaje.posiciondragon2.ListaDragones, False)
+          for dragon in ColisionPersonajeDragon2:
+             print "+300 Puntos"
+             sounds.Salto.stop()
+             sounds.Destruido.play()
+             dragon.kill()
+             Puntaje += 300
+
+       else:
+          ColisionPersonajeDragon2 = pygame.sprite.spritecollide(personaje, personaje.posiciondragon2.ListaDragones, False)
+          for dragon in ColisionPersonajeDragon2:
+             print "-1 Vida"
+             sounds.Salto.stop()
+             sounds.VidaMenos.play()
+             if CantidadVidas == 0:
+                CantidadVidas = 0
+                print "GAME OVER"
+                FinGameOver = True
+                dragon.kill()
+                personaje.kill()
+                EliminarDisparo = True
+                PausaTiempo = True
+                sounds.GameOver.play(-1)
+             else:
+                CantidadVidas -= 1
+                dragon.kill()
 #------------------------------------------------------------------------------------------------------------------------------------------------
        Balas = FuenteEstadisticas.render("Monos = " + str(CantidadBalas), True, gris)
        ColisionModificableBalas = pygame.sprite.spritecollide(personaje, personaje.posicionbala.ListaBalas, False)
@@ -1930,6 +2074,8 @@ def IniciarJuego():
           j=2
           personaje.nivel = DibujoPlataformas2
           personaje.posicionmeta = DibujoMeta2
+          personaje.posicionvida = DibujoVidas2
+          personaje.posicionbala = DibujoBalas2
           ListaSpritesActivos.add(personaje)
           FondoAnimadoGrupo2.update()
           FondoAnimadoGrupo2.draw(pantalla)
@@ -1939,17 +2085,16 @@ def IniciarJuego():
           DibujoZombies2.draw(pantalla)
           DibujoFantasmas2.update()
           DibujoFantasmas2.draw(pantalla)
-          DibujoDragones.update()
-          DibujoDragones.draw(pantalla)
+          DibujoDragones2.update()
+          DibujoDragones2.draw(pantalla)
           DibujoMeta2.update()
           DibujoMeta2.draw(pantalla)
-          DibujoVidas.update()
-          DibujoVidas.draw(pantalla)
-          DibujoBalas.update()
-          DibujoBalas.draw(pantalla)
+          DibujoVidas2.update()
+          DibujoVidas2.draw(pantalla)
+          DibujoBalas2.update()
+          DibujoBalas2.draw(pantalla)
           DibujoInvencibles.update()
           DibujoInvencibles.draw(pantalla)
-      
           
        else:
           FondoAnimadoGrupo.update()
@@ -2021,9 +2166,32 @@ def IniciarJuego():
             pantalla.blit(TextoMision1Completa,(pos13,340))
             MovimientoPresioneEspacioMeta()
             pantalla.blit(TextoPresioneEspacioMeta,(450,pos14))
+          
           if j == 2:
-            pantalla.blit(TextoMision1Completaf,(pos13,340))
-            if tecla[pygame.K_ESCAPE]:
+            personaje.kill()
+            pygame.mixer.music.stop()
+            FondoInstrucciones = pygame.image.load('FondoInstrucciones1.png').convert()
+            Calavera = pygame.image.load('Calavera.png').convert_alpha()
+            pantalla.blit(FondoInstrucciones,(0,0))
+            fuente3 = pygame.font.Font('Zombified.ttf', 60)
+            intro1 = fuente3.render("         FELICIDADES...         ", 1, (rojo))
+            intro2 = fuente3.render("        EXTERMINASTE A          ", 1, (rojo))
+            intro21 = fuente3.render("         LOS ZOMBIES           ", 1, (rojo))
+            intro3 = fuente3.render("         GRACIAS A TI           ", 1, (rojo))
+            intro4 = fuente3.render("       TODA LA HUMANIDAD        ", 1, (rojo))
+            intro5 = fuente3.render("      EVOLUCIONARA DE NUEVO     ", 1, (rojo))
+            pantalla.blit(FondoInstrucciones,(0,0))
+            pantalla.blit(intro1,(480,200))
+            pantalla.blit(intro2,(480,250))
+            pantalla.blit(intro21,(480,300))
+            pantalla.blit(intro3,(480,350))
+            pantalla.blit(intro4,(480,400))
+            pantalla.blit(intro5,(480,450))          
+            pantalla.blit(Calavera,(650,10))
+            if tecla[pygame.K_ESCAPE] or tecla[pygame.K_SPACE]:
+              sounds.GameOver.stop()
+              pygame.mixer.music.load('PiratasDelCaribe.mp3')
+              pygame.mixer.music.play(-1)
               salir = True
           
           if tecla[pygame.K_SPACE]:
@@ -2084,16 +2252,17 @@ def Instrucciones():
              print "REGRESAR AL MENU"
              salir = True
        pygame.display.flip()
+
 #------------------------------------------------------------------------------------------------------------------------------------------------
 def Creditos():
     salir = False
     FondoCreditos = pygame.image.load('FondoCreditos.png').convert()
     Calavera = pygame.image.load('Calavera.png').convert_alpha()
-    LogoUniversidad = pygame.image.load('LogoUniversidad.png').convert_alpha()
-    Computador = pygame.image.load('Computador.png').convert_alpha()
+    LogoUniversidad = pygame.image.load('Computador1.png').convert_alpha()
+    Computador = pygame.image.load('Computador1.png').convert_alpha()
     fuente = pygame.font.Font('Zombified.ttf', 80)
     fuente2 = pygame.font.Font('Zombified.ttf', 50)
-    fuente3 = pygame.font.Font('Zombified.ttf', 30)
+    fuente3 = pygame.font.Font('Zombified.ttf', 50)
     Titulo = fuente.render("PODER CIENTIFICO", 1, (dorado))
     ComputacionGrafica = fuente2.render("COMPUTACION GRAFICA", 1, (dorado))
     Nombre1 = fuente3.render("Jhonatan Pineda", 1, (rojooscuro))
@@ -2117,9 +2286,9 @@ def Creditos():
        MovimientoComputacionGrafica()
        pantalla.blit(ComputacionGrafica,(300,pos10))
        MovimientoNombre1()
-       pantalla.blit(Nombre1,(700,pos11))
+       pantalla.blit(Nombre1,(800,pos11))
        MovimientoNombre2()
-       pantalla.blit(Nombre2,(700,pos12))
+       pantalla.blit(Nombre2,(800,pos12))
        pygame.display.flip()
 #------------------------------------------------------------------------------------------------------------------------------------------------
 # Menu Inicial

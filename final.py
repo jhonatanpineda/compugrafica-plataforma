@@ -1245,7 +1245,7 @@ class MetaNivel1(pygame.sprite.Sprite):
         self.Meta = pygame.image.load("Meta.png")
         self.transparente = self.Meta.get_at((0,0))
         self.Meta.set_colorkey(self.transparente)
-        posicionmeta = [[600,600],[5600, 150]]
+        posicionmeta = [[5600, 150]]
         for recorrido in posicionmeta:
             meta = Meta((recorrido[0],recorrido[1]), self.Meta)
             self.ListaMeta.add(meta) 
@@ -2166,9 +2166,32 @@ def IniciarJuego():
             pantalla.blit(TextoMision1Completa,(pos13,340))
             MovimientoPresioneEspacioMeta()
             pantalla.blit(TextoPresioneEspacioMeta,(450,pos14))
+          
           if j == 2:
-            pantalla.blit(TextoMision1Completaf,(pos13,340))
-            if tecla[pygame.K_ESCAPE]:
+            personaje.kill()
+            pygame.mixer.music.stop()
+            FondoInstrucciones = pygame.image.load('FondoInstrucciones1.png').convert()
+            Calavera = pygame.image.load('Calavera.png').convert_alpha()
+            pantalla.blit(FondoInstrucciones,(0,0))
+            fuente3 = pygame.font.Font('Zombified.ttf', 60)
+            intro1 = fuente3.render("         FELICIDADES...         ", 1, (rojo))
+            intro2 = fuente3.render("        EXTERMINASTE A          ", 1, (rojo))
+            intro21 = fuente3.render("         LOS ZOMBIES           ", 1, (rojo))
+            intro3 = fuente3.render("         GRACIAS A TI           ", 1, (rojo))
+            intro4 = fuente3.render("       TODA LA HUMANIDAD        ", 1, (rojo))
+            intro5 = fuente3.render("      EVOLUCIONARA DE NUEVO     ", 1, (rojo))
+            pantalla.blit(FondoInstrucciones,(0,0))
+            pantalla.blit(intro1,(480,200))
+            pantalla.blit(intro2,(480,250))
+            pantalla.blit(intro21,(480,300))
+            pantalla.blit(intro3,(480,350))
+            pantalla.blit(intro4,(480,400))
+            pantalla.blit(intro5,(480,450))          
+            pantalla.blit(Calavera,(650,10))
+            if tecla[pygame.K_ESCAPE] or tecla[pygame.K_SPACE]:
+              sounds.GameOver.stop()
+              pygame.mixer.music.load('PiratasDelCaribe.mp3')
+              pygame.mixer.music.play(-1)
               salir = True
           
           if tecla[pygame.K_SPACE]:
@@ -2229,13 +2252,14 @@ def Instrucciones():
              print "REGRESAR AL MENU"
              salir = True
        pygame.display.flip()
+
 #------------------------------------------------------------------------------------------------------------------------------------------------
 def Creditos():
     salir = False
     FondoCreditos = pygame.image.load('FondoCreditos.png').convert()
     Calavera = pygame.image.load('Calavera.png').convert_alpha()
-    LogoUniversidad = pygame.image.load('LogoUniversidad.png').convert_alpha()
-    Computador = pygame.image.load('Computador.png').convert_alpha()
+    LogoUniversidad = pygame.image.load('Computador1.png').convert_alpha()
+    Computador = pygame.image.load('Computador1.png').convert_alpha()
     fuente = pygame.font.Font('Zombified.ttf', 80)
     fuente2 = pygame.font.Font('Zombified.ttf', 50)
     fuente3 = pygame.font.Font('Zombified.ttf', 50)
